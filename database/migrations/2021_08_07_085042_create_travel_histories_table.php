@@ -16,8 +16,7 @@ class CreateTravelHistoriesTable extends Migration
         Schema::create('travel_histories', function (Blueprint $table) {
             $table->id();
             $table->unsignedInteger('card_id');
-            $table->unsignedSmallInteger('from_city_id');
-            $table->unsignedSmallInteger('to_city_id');
+            $table->unsignedSmallInteger('transport_route_id');
             $table->timestamps();
         });
     }

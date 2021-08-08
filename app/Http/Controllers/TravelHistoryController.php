@@ -2,84 +2,26 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Card;
 use App\Models\TravelHistory;
-use Illuminate\Http\Request;
+use Illuminate\Contracts\View\View;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\Foundation\Application;
 
 class TravelHistoryController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Application|Factory|View
      */
-    public function index()
+    public function index($id)
     {
-        //
-    }
+        $travelHistories = TravelHistory::with('route')->whereCardId($id)->orderBy('id','DESC')->simplePaginate(5);
+        $number = Card::findOrfail($id)->number;
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\TravelHistory  $travelHistory
-     * @return \Illuminate\Http\Response
-     */
-    public function show(TravelHistory $travelHistory)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\TravelHistory  $travelHistory
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(TravelHistory $travelHistory)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\TravelHistory  $travelHistory
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, TravelHistory $travelHistory)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\TravelHistory  $travelHistory
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(TravelHistory $travelHistory)
-    {
-        //
+        return view('travelHistory.index',compact('travelHistories', 'number'))
+            ->with('i', (request()->input('page', 1) - 1) * 5);
     }
 }

@@ -15,8 +15,9 @@ class CreateCardsTable extends Migration
     {
         Schema::create('cards', function (Blueprint $table) {
             $table->id();
+            $table->string('number');
             $table->unsignedInteger('user_id');
-            $table->unsignedTinyInteger('transport_id');
+            $table->unsignedTinyInteger('card_type_id');
             $table->unsignedTinyInteger('city_id');
             $table->unsignedInteger('balance')->default(0);
             $table->timestamps();

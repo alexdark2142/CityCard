@@ -16,8 +16,7 @@ class CreateTransportsTable extends Migration
         Schema::create('transports', function (Blueprint $table) {
             $table->id();
             $table->string('type');
-            $table->string('type_of_travel');
-            $table->unsignedSmallInteger('cost');
+            $table->unsignedSmallInteger('tariff');
         });
     }
 

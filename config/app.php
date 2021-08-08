@@ -13,7 +13,8 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Laravel'),
+    'name' => env('APP_NAME', 'CityCard'),
+    'admin' => env('APP_NAME', 'Адмінка'),
 
     /*
     |--------------------------------------------------------------------------
@@ -165,7 +166,7 @@ return [
         /*
          * Package Service Providers...
          */
-
+        Spatie\Permission\PermissionServiceProvider::class,
         /*
          * Application Service Providers...
          */
