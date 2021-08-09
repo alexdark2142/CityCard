@@ -11,6 +11,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 /**
  * @method static create(array $array)
  * @method static whereEmail(string $string)
+ * @method static findOrFail()
  */
 class User extends Authenticatable
 {

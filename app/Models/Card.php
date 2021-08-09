@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @method static findOrfail(mixed $get)
  * @method static create(array $all)
  * @method static whereUserId($userId)
+ * @method static whereNumber(mixed $get)
  */
 class Card extends Model
 {

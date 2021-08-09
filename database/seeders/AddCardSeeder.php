@@ -21,13 +21,16 @@ class AddCardSeeder extends Seeder
         $cardModel = Card::class;
 
         for ($i = 0; $i < 4; $i++) {
-            $cardModel::create([
-                'number' => rand(111111, 999999),
+            $cardData = $cardModel::create([
+                'number' => time(),
                 'user_id' => $userId,
                 'card_type_id' => rand(1, 4),
                 'city_id' => rand(1, 3),
                 'balance' => rand(1, 500),
             ]);
+
+            $cardData->number = $cardData->number . $cardData->id;
+            $cardData->save();
         }
     }
 }

@@ -50,12 +50,16 @@ class CardController extends Controller
      */
     public function store(Request $request, $userId)
     {
-        Card::create([
+        $cardData = Card::create([
             'user_id' => $userId,
-            'number' => rand(111111, 999999),
+            'number' => time(),
             'city_id' => $request->get('city'),
             'card_type_id' => $request->get('type'),
         ]);
+
+
+        $cardData->number = $cardData->number . $cardData->id;
+        $cardData->save();
 
         return redirect(Auth::id() . '/cards');
     }

@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Card;
 use App\Models\User;
+use Illuminate\Routing\Redirector;
 use App\Http\Requests\LoginRequest;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Redirect;
 use App\Http\Requests\RegistrationRequest;
+use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
 /**
@@ -37,7 +39,7 @@ class AuthController extends Controller
             'name'    => $request->get("name"),
             'phone'    => $request->get("phone"),
             'email'    => $request->get("email"),
-            'password' => Hash::make($request->get("password")),
+            'password' => bcrypt($request->get("password")),
         ]);
 
         return response()->redirectTo('login');
@@ -45,18 +47,27 @@ class AuthController extends Controller
 
     /**
      * @param LoginRequest $request
-     * @return RedirectResponse
+     * @return Application|RedirectResponse|Redirector
      */
-    public function login(LoginRequest $request): RedirectResponse
+    public function login(LoginRequest $request)
     {
         if (filter_var($request->get('phone'), FILTER_VALIDATE_INT)) {
             if (Auth::attempt(['phone' => $request->get('phone'), 'password' =>  $request->get('password')])) {
                 return redirect(Auth::id(). '/cards');
             }
-        } else {
-            if (Auth::attempt(['login' => $request->get('phone'), 'password' =>  $request->get('password')])) {
-                return redirect('admin/cities');
+
+        }
+
+        if ($dataCard = Card::whereNumber($request->get('phone'))->firstOrFail()){
+            $user = User::findOrFail($dataCard->user_id);
+
+            if (Auth::attempt(['phone' => $user->phone, 'password' =>  $request->get('password')])) {
+                return redirect(Auth::id(). '/cards');
             }
+        }
+
+        if (Auth::attempt(['login' => $request->get('phone'), 'password' =>  $request->get('password')])) {
+            return redirect('admin/cities');
         }
 
         return Redirect::back()->withErrors(['phone' => 'Невірні дані!']);
